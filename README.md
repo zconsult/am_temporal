@@ -1,3 +1,3 @@
 # am_temporal
-zconsult +  azorya
+zconsult +  azorya + zconsult
 
