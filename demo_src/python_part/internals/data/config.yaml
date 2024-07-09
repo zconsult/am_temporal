@@ -1,0 +1,64 @@
+# tickers used by load_universe
+tickers: ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'TSLA', 'JPM', 'WMT', 'UNH', 'BAC', 'HD']
+
+minio_info: {
+        endpoint: '192.168.50.9:9000',
+        access_key: 'alex',
+        secret_key: '12345678',
+        bucket_name: 'zbucket1',
+}
+
+temporal_info: {
+        target_host: "192.168.50.9:7233",
+        task_queue: "Z_BACKTESTER_TASK_QUEUE",
+        parallel_task_queue: "Z_BACKTESTER_PARALLEL_TASK_QUEUE"
+}
+
+get_daily_close_worker_info: {
+        input_minio_object: '/top/misha_data/pd_from_yf',
+        download_file_name: '/tmp/daily_close_input',
+        output_minio_object: '/top/backtester/daily_close_output',
+        upload_file_name: '/tmp/daily_close_output'
+}
+
+compute_daily_returns_worker_info: {
+        input_minio_object: '/top/backtester/daily_close_output',
+        download_file_name: '/tmp/daily_returns_input',
+        output_minio_object: '/top/backtester/daily_returns_output',
+        upload_file_name: '/tmp/daily_returns_output'
+}
+
+load_inv_risk_worker_info: {
+        input_minio_object: '/top/backtester/daily_returns_output',
+        download_file_name: '/tmp/load_inv_risk_input',
+        output_minio_object: '/top/backtester/load_inv_risk_output',
+        upload_file_name: '/tmp/load_inv_risk_output'
+}
+
+compute_alpha_worker_info: {
+        input_minio_object: '/top/backtester/daily_returns_output',
+        download_file_name: '/tmp/compute_alpha_input',
+        output_minio_object: '/top/backtester/compute_alpha_output',
+        upload_file_name: '/tmp/compute_alpha_output'
+}
+
+load_benchmarks_worker_info: {
+        input_minio_object: '/top/backtester/daily_returns_output',
+        download_file_name: '/tmp/load_benchmarks_input',
+        output_minio_object: '/top/backtester/load_benchmarks_output',
+        upload_file_name: '/tmp/load_benchmarks_output'
+}
+
+run_sim_worker_info: {
+        input_daily: '/top/backtester/daily_returns_output',
+        input_inv_risk: '/top/backtester/load_inv_risk_output',
+        input_alpha: '/top/backtester/compute_alpha_output',
+        input_benchmark: '/top/backtester/load_benchmarks_output',
+
+        output_minio_object_template: '/top/backtester/sim_output',
+        upload_file_name_template: '/tmp/sim_output'
+}
+# to be changed
+#minio_info: minio_info_home
+
+
