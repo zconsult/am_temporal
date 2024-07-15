@@ -1,44 +1,29 @@
 package com.alfie.temporal.bt;
 
+import java.util.Map;
+
 public class CoreBacktestDetails implements BacktestDetails{
-    private String sourceAccountId;
-    private String destinationAccountId;
-    private String transactionReferenceId;
-    private int amountToTransfer;
+    private String loadUniverseArg;
+    private Map<String, String> dailyCloseArgs;
 
     // MARK: Constructor
-
     public CoreBacktestDetails() {
         // Default constructor is needed for Jackson deserialization
     }
 
-    public CoreBacktestDetails(String sourceAccountId,
-                                  String destinationAccountId,
-                                  String transactionReferenceId,
-                                  int amountToTransfer)
-    {
-        this.sourceAccountId = sourceAccountId;
-        this.destinationAccountId = destinationAccountId;
-        this.transactionReferenceId = transactionReferenceId;
-        this.amountToTransfer = amountToTransfer;
+    public CoreBacktestDetails(String loadUniverseArg, Map<String, String> dailyCloseArgs){
+        this.loadUniverseArg = loadUniverseArg;
+        this.dailyCloseArgs  = dailyCloseArgs;
     }
 
     // MARK: Getter methods
-
-    public String getSourceAccountId() {
-        return sourceAccountId;
+    @Override
+    public String getLoadUniverseActivityArg() {
+        return loadUniverseArg;
     }
 
-    public String getDestinationAccountId() {
-        return destinationAccountId;
+    @Override
+    public Map<String, String> getDailyCloseActivityArgs() {
+        return dailyCloseArgs;
     }
-
-    public String getTransactionReferenceId() {
-        return transactionReferenceId;
-    }
-
-    public int getAmountToTransfer() {
-        return amountToTransfer;
-    }
-
 }

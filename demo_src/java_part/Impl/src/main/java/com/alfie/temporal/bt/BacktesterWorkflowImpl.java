@@ -126,20 +126,3 @@ public class BacktesterWorkflowImpl implements BacktesterWorkflow {
      }
 }
 
-/*
-        try {
-            Map<String, Object> m = accountActivityStub.execute("z_map_test", Map.class, universe_list);
-            for (String key : m.keySet()) {
-                System.out.println(key + ":" + m.get(key));
-            }
-        } catch (Exception e) {
-            // If the withdrawal fails, for any exception
-            System.out.printf( "Load_universe  failed");
-            System.out.flush();
-
-            // Transaction ends here
-            return;
-        }
-
- */
-
