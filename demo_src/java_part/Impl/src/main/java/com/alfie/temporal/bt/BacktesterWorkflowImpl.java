@@ -63,7 +63,7 @@ public class BacktesterWorkflowImpl implements BacktesterWorkflow {
 
         List<String> universe_list;
         try {
-             universe_list = defaultActivityStub.execute(LOAD_UNIVERSE, List.class, "hardcoded");
+             universe_list = defaultActivityStub.execute(LOAD_UNIVERSE, List.class, input.loadUniverseActivityArg());
         } catch (Exception e) {
             System.out.print( "Load_universe  failed\n");  System.out.flush();
             return;

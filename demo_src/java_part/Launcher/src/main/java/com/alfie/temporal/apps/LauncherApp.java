@@ -1,14 +1,13 @@
 package com.alfie.temporal.apps;
 
 import com.alfie.temporal.bt.BacktestDetails;
-import com.alfie.temporal.bt.BacktesterWorkflow;
-import com.alfie.temporal.bt.CoreBacktestDetails;
 import com.alfie.temporal.bt.zConfMerger;
 import com.alfie.temporal.bt.Shared;
 
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
@@ -56,6 +55,8 @@ public class LauncherApp {
 
         String temporalServer = (String)conf.get("temporalServer");
         String workflowID = (String)conf.get("workflowID");
+        String workflowType = (String)conf.get("workflowType");
+
         // A WorkflowServiceStubs communicates with the Temporal front-end service.
         WorkflowServiceStubs serviceStub =
                 WorkflowServiceStubs.newServiceStubs(
@@ -76,21 +77,20 @@ public class LauncherApp {
 
         // WorkflowStubs enable calls to methods as if the Workflow object is local
         // but actually perform a gRPC call to the Temporal Service.
-        this.workflow = client.newWorkflowStub(BacktesterWorkflow.class, options);
+        this.workflow =  client.newUntypedWorkflowStub(workflowType, options);
 
-        // Configure the details for this money transfer request
+        // Prepare some (mostly ignored:)) arguments
         String loadUniverseArg = (String)conf.get("loadUniverseArg");
-
-        this.bd = new CoreBacktestDetails(loadUniverseArg, Map.of("key1", "value1"));
+        this.bd = new BacktestDetails(loadUniverseArg, Map.of("key1", "value1"));
     }
 
     private void launch() {
-        WorkflowExecution we = WorkflowClient.start(workflow::RunTest, bd);
+        WorkflowExecution we = workflow.start(bd);
 
         System.out.print("\nBACKTESTER PROJECT\n\n");
         System.out.printf("[WorkflowID: %s]\n[RunID: %s]\n\n", we.getWorkflowId(), we.getRunId());
     }
 
-    private final BacktesterWorkflow workflow;
+    private final WorkflowStub workflow;
     private final BacktestDetails bd;
 }
